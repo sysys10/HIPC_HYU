@@ -29,7 +29,6 @@ export default function Mypage() {
                 navigate('/login');
             }
             setLoading(false);
-            console.log(user)
         };
         fetchUserData();
 

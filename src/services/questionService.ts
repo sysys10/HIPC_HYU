@@ -88,57 +88,6 @@ export const getQuestionList = async (
   }
 };
 
-export const searchQuestions = async (
-  searchTerm: string,
-  page: number = 1
-): Promise<{
-  questions: QuestionListType[];
-  paginationInfo: PaginationInfo;
-}> => {
-  // 검색 기능은 getQuestionList 함수를 재사용합니다.
-  return getQuestionList(page, searchTerm);
-};
-
-export const getQuestions = async (
-  page: number
-): Promise<{
-  questions: Question[];
-  paginationInfo: PaginationInfo;
-}> => {
-  try {
-    const questionsRef = collection(db, "questions");
-    let q = query(
-      questionsRef,
-      orderBy("createdAt", "desc"),
-      limit(QUESTIONS_PER_PAGE)
-    );
-
-    const snapshot = await getDocs(q);
-    const questions = snapshot.docs.map(
-      (doc) =>
-        ({
-          id: doc.id,
-          ...doc.data(),
-          createdAt: (doc.data().createdAt as Timestamp).toDate(),
-        } as Question)
-    );
-
-    const totalDocs = await getDocs(questionsRef);
-    const totalQuestions = totalDocs.size;
-
-    const paginationInfo: PaginationInfo = {
-      currentPage: page,
-      totalPages: Math.ceil(totalQuestions / QUESTIONS_PER_PAGE),
-      pageSize: QUESTIONS_PER_PAGE,
-    };
-
-    return { questions, paginationInfo };
-  } catch (error) {
-    console.error("Error fetching questions:", error);
-    throw error;
-  }
-};
-
 export const getQuestionById = async (id: string): Promise<Question | null> => {
   try {
     const docRef = doc(db, "questions", id);

@@ -131,7 +131,6 @@ export default function Study() {
                 updatedAt: new Date(),
                 isProfileComplete: true
             });
-            console.log('Sign up form submitted:', signUpForm);
             setModalIsOpen(false);
             setIsAlreadyApplied(true);
         } catch (error) {

@@ -154,7 +154,6 @@ export const fetchSolvedCount = async (): Promise<number> => {
     if (snapshot.exists()) {
       const data = snapshot.data();
       const count = data.problem_cnt;
-      console.log(`Total solved problems: ${count}`);
       return count;
     } else {
       console.error("Solved problems document not found");
