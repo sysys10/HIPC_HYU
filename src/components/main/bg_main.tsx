@@ -14,7 +14,7 @@ export default function BgMain({ count, p_one, r_one }: BgMainProps) {
             <div style={{ backgroundImage: "url(./assets/images/hipc_bgmain.png)" }} className="relative w-full h-screen bg-no-repeat bg-cover bg-center flex items-center justify-center overflow-hidden">
                 <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 h-full flex flex-col py-20">
                     <div className="font-pretendard absolute top-10 md:top-0 left-0 text-white text-[10rem] md:text-[16.5rem] font-extrabold opacity-10 leading-none">HIPC</div>
-                    <div className="mt-60 2xl:mt-72 text-white space-y-8">
+                    <div className="mt-64 2xl:mt-80 text-white space-y-8">
                         <div className="flex flex-col items-center w-fit mx-auto">
                             <div className="text-3xl sm:text-4xl lg:text-6xl font-bold mb-1 opacity-90 animate-fade-in">
                                 한양인들을 위한 알고리즘 스터디
