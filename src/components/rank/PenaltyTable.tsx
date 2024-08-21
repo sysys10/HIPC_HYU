@@ -49,7 +49,7 @@ export default function PenaltyTable() {
     const totalUnpaid = totalPenalty - totalPaid;
 
     return (
-        <div className="max-w-7xl font-pretendard mx-auto px-4 md:px-8 pb-12">
+        <div className="max-w-6xl font-pretendard mx-auto px-4 md:px-8 pb-12">
             <div className="text-sm md:text-base text-gray-500 mb-2">-벌금은 갱신까지 시간이 소요됩니다.. 수동이라..ㅎ</div>
             {loading ? (
                 <div className="flex justify-center items-center h-64">

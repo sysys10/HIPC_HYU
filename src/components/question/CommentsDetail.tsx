@@ -1,7 +1,6 @@
 import { Comment } from '../../types';
 import { useState } from 'react';
 import { FaUser, FaClock } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
 
 interface CommentsProps {
   comment: Comment;
@@ -31,7 +30,7 @@ export function Comments({ comment, onUpdate, onDelete, currentUser }: CommentsP
                 <div className='w-full flex justify-between'>
                     <div>
                         <FaUser className="mr-2 inline" />
-                        <Link to={`https://solved.ac/profile/${comment.writer}`} className="mr-4">{comment.writer}</Link>
+                        <span className="mr-4">{comment.writer}</span>
                         <FaClock className="mr-2 inline" />
                         <span>{new Date(comment.createdAt).toLocaleString()}</span>
                     </div>
@@ -45,13 +44,13 @@ export function Comments({ comment, onUpdate, onDelete, currentUser }: CommentsP
             </div>
             {
                 isCommentEdit ?
-                    <input
-                        type='text'
+                    <textarea
                         className='w-full p-2 my-3 border rounded-lg outline-none'
                         value={editComment}
                         onChange={(e) => { setEditComment(e.target.value); }}
+                        rows={4}
                     /> :
-                    <p>{comment.content}</p>
+                    <div className="whitespace-pre-wrap">{comment.content}</div>
             }
             {isCommentEdit &&
                 <button

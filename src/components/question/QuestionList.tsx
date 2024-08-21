@@ -60,7 +60,8 @@ const QuestionList: React.FC = () => {
               />
             </FormControl>
             <Link to="/ask" className="bg-blue-500 text-white px-4 py-2 rounded whitespace-nowrap flex items-center hover:bg-blue-600 transition-colors duration-300 w-full sm:w-auto justify-center">
-              <PiPencilLine className='text-2xl mr-1'/>질문하기
+              <PiPencilLine className='text-2xl mr-1' />
+              질문하기
             </Link>
           </div>
         </div>
@@ -111,7 +112,7 @@ const QuestionList: React.FC = () => {
           )}
         </AnimatePresence>
         {paginationInfo && paginationInfo.totalPages > 1 && (
-          <motion.div 
+          <motion.div
             className="flex justify-center mt-6 overflow-x-auto py-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

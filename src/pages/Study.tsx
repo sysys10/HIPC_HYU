@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
-import { User } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { Link, useNavigate } from 'react-router-dom';
 import { auth, db } from "../services/firebase.js";
@@ -8,18 +7,20 @@ import { FaCalendarAlt, FaGraduationCap, FaUsers, FaChalkboardTeacher, FaCheckCi
 import Banner from '../components/layout/banner';
 import { TextField, Button, Alert } from '@mui/material';
 
-Modal.setAppElement('#root');
+interface UserData {
+    email: string;
+    name: string;
+    photoURL: string | null;
+    departure: string;
+    uid: string;
+}
 
 interface SignUpForm {
     boj_id: string;
-    name: string;
-    department: string;
 }
 
 interface FormErrors {
     boj_id?: string;
-    name?: string;
-    department?: string;
 }
 
 interface StudyInfo {
@@ -39,7 +40,7 @@ const studyData: StudyInfo[] = [
         semester: "2학기",
         startDate: "2024-09-02",
         endDate: "2024-10-02",
-        students: 0,
+        students: 1,
         solved: 0,
         mentor: "신윤수 멘토",
         isOpen: true
@@ -60,7 +61,7 @@ const studyData: StudyInfo[] = [
         startDate: "2023-07-01",
         endDate: "2023-08-02",
         students: 22,
-        solved:1810,
+        solved: 1810,
         mentor: "송우정 멘토",
         isOpen: false
     },
@@ -78,12 +79,10 @@ const studyData: StudyInfo[] = [
 
 export default function Study() {
     const navigate = useNavigate();
-    const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUser, setCurrentUser] = useState<UserData | null>(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [signUpForm, setSignUpForm] = useState<SignUpForm>({
         boj_id: '',
-        name: '',
-        department: ''
     });
     const [formErrors, setFormErrors] = useState<FormErrors>({});
     const [isAlreadyApplied, setIsAlreadyApplied] = useState(false);
@@ -91,21 +90,26 @@ export default function Study() {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(async (user) => {
             if (user) {
-                setCurrentUser(user);
-                const userDoc = await getDoc(doc(db, "signedUser", user.uid));
-                if (userDoc.exists()) {
-                    setIsAlreadyApplied(true);
+                const userRef = doc(db, 'users', user.uid);
+                const userSnap = await getDoc(userRef);
+                if (userSnap.exists()) {
+                    const userData = userSnap.data() as UserData;
+                    setCurrentUser(userData);
+
+                    // Check if user has already applied
+                    const signedUserRef = doc(db, "signedUser", user.uid);
+                    const signedUserSnap = await getDoc(signedUserRef);
+                    setIsAlreadyApplied(signedUserSnap.exists());
                 }
             }
         });
         return () => unsubscribe();
     }, [navigate]);
 
-    const handleApply = async () => {
-        if (currentUser !== null) {
+    const handleApply = () => {
+        if (currentUser) {
             setModalIsOpen(true);
         } else {
-            alert("우선 로그인 해주세요!");
             navigate('/login');
         }
     };
@@ -127,9 +131,9 @@ export default function Study() {
                 ...signUpForm,
                 quarter: "2024 2학기",
                 email: currentUser.email,
-                photoURL: currentUser.photoURL,
+                name: currentUser.name,
+                department: currentUser.departure,
                 updatedAt: new Date(),
-                isProfileComplete: true
             });
             setModalIsOpen(false);
             setIsAlreadyApplied(true);
@@ -152,7 +156,7 @@ export default function Study() {
                 <div className="flex justify-between text-gray-700 mb-3">
                     <div className="flex items-center">
                         <FaUsers className="mr-2" />
-                        <p>{study.students} 학생</p>
+                        <p>{study.students}학생</p>
                     </div>
                     <div className="flex items-center">
                         <FaChalkboardTeacher className="mr-2" />
@@ -161,7 +165,7 @@ export default function Study() {
                 </div>
                 <div className="flex items-center text-gray-700 mb-6">
                     <FaCheckCircle className="mr-2" />
-                    <p>{study.solved} 문제 해결</p>
+                    <p>{study.solved}문제 해결</p>
                 </div>
                 <button
                     onClick={study.isOpen ? handleApply : undefined}
@@ -198,20 +202,18 @@ export default function Study() {
                     </div>
                 ))}
             </div>
-
-               <Modal
+            <Modal
                 isOpen={modalIsOpen}
                 onRequestClose={() => setModalIsOpen(false)}
                 contentLabel="스터디 신청"
                 className="modal"
                 overlayClassName="overlay"
             >
-                <h2 className="text-2xl font-bold mb-4">회원가입</h2>
+                <h2 className="text-2xl font-bold mb-4">스터디 신청</h2>
                 <div className='w-full flex flex-col justify-center items-center mb-4'>
                     {currentUser && (
                         <>
                             <img src={currentUser.photoURL || undefined} width={100} height={100} className='rounded-full' alt="User profile" />
-                            <p className='font-pretendard text-gray-700 mt-2'>{currentUser.displayName || currentUser.email}</p>
                         </>
                     )}
                 </div>
@@ -228,12 +230,13 @@ export default function Study() {
                             readOnly: true,
                         }}
                         sx={{
-                            backgroundColor: '#e5e7eb',
+                            backgroundColor: '#f3f4f6',
                             '& .MuiInputBase-input.Mui-disabled': {
-                                WebkitTextFillColor: 'rgba(0, 0, 0, 0.7)',
+                                WebkitTextFillColor: 'rgba(0, 0, 0, 0.6)',
                             },
                         }}
                     />
+                    <div className='text-sm gray- ml-2'>*Solved.ac에 등록되어있어야합니다.</div>
                     <TextField
                         fullWidth
                         required
@@ -245,18 +248,25 @@ export default function Study() {
                         error={!!formErrors.boj_id}
                         helperText={formErrors.boj_id}
                     />
-                    <div className='text-sm ml-2'>*Solved.ac에 등록되어있어야합니다.</div>
                     {signUpForm.boj_id && <Link target='_blank' to={`https://solved.ac/profile/${signUpForm.boj_id}`} className="text-sm ml-2 text-blue-600">{`https://solved.ac/profile/${signUpForm.boj_id}`}</Link>}
+
                     <TextField
                         fullWidth
                         required
                         margin="normal"
-                        label="이름"
+                        label="Name"
                         name="name"
-                        value={signUpForm.name}
-                        onChange={handleSignUpChange}
-                        error={!!formErrors.name}
-                        helperText={formErrors.name}
+                        value={currentUser?.name || ''}
+                        disabled
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        sx={{
+                            backgroundColor: '#f3f4f6',
+                            '& .MuiInputBase-input.Mui-disabled': {
+                                WebkitTextFillColor: 'rgba(0, 0, 0, 0.6)',
+                            },
+                        }}
                     />
                     <TextField
                         fullWidth
@@ -264,11 +274,19 @@ export default function Study() {
                         margin="normal"
                         label="학과"
                         name="department"
-                        value={signUpForm.department}
-                        onChange={handleSignUpChange}
-                        error={!!formErrors.department}
-                        helperText={formErrors.department}
+                        value={currentUser?.departure || ''}
+                        disabled
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                        sx={{
+                            backgroundColor: '#f3f4f6',
+                            '& .MuiInputBase-input.Mui-disabled': {
+                                WebkitTextFillColor: 'rgba(0, 0, 0, 0.6)',
+                            },
+                        }}
                     />
+
                     <div className="flex justify-end space-x-2">
                         <Button
                             type="button"
@@ -291,3 +309,4 @@ export default function Study() {
         </div>
     );
 }
+

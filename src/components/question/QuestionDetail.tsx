@@ -9,7 +9,7 @@ import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { Badgesm } from '../badge';
 import { Comments } from './CommentsDetail.tsx';
 import { getQuestionById } from '../../services/questionService.ts';
-
+import { parseName } from '../../utils/func.ts';
 const QuestionDetail: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
@@ -46,7 +46,7 @@ const QuestionDetail: React.FC = () => {
       const newCommentData: Omit<Comment, "id" | "createdAt"> = {
         questionId: id,
         author: user.uid,
-        writer: user.displayName || user.email || "익명",
+        writer: parseName(user.displayName!),
         content: newComment
       };
       await addComment(newCommentData);
@@ -100,7 +100,7 @@ const QuestionDetail: React.FC = () => {
   const isAuthor = user?.uid === question.author;
 
   return (
-    <div className="container font-pretendard mx-auto px-4 py-8 mt-20 max-w-3xl">
+    <div className="container font-pretendard mx-auto px-4 py-8 mt-20 max-w-5xl">
       <Link to="/board" className="inline-flex items-center text-blue-500 hover:underline mb-6">
         <FaArrowLeft className="mr-2" />
         목록으로 돌아가기
@@ -144,7 +144,6 @@ const QuestionDetail: React.FC = () => {
           </div>
         </div>
       </div>
-
       <div className="bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-6">
           <h2 className="text-2xl font-bold mb-4">댓글</h2>

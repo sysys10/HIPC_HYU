@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 
 interface UserData {
     email: string;
-    displayName: string | null;
+    name: string;
+    departure: string;
 }
 
 export default function Mypage() {
@@ -25,13 +26,11 @@ export default function Mypage() {
                     setUserData(data);
                 } else
                     await signOut(auth);
-            } else {
+            } else
                 navigate('/login');
-            }
             setLoading(false);
         };
         fetchUserData();
-
     }, [navigate]);
 
     const handleLogout = async () => {
@@ -52,7 +51,7 @@ export default function Mypage() {
     }
 
     if (!userData) {
-        return null; // 또는 에러 메시지를 표시할 수 있습니다.
+        return null;
     }
 
     return (
@@ -61,11 +60,15 @@ export default function Mypage() {
                 <div className="md:flex">
                     <div className="p-8 w-full">
                         <div className="uppercase tracking-wide text-sm text-indigo-500 font-semibold mb-1">마이페이지</div>
-                        <h1 className="block mt-1 text-lg leading-tight font-medium text-black">{userData.displayName}님의 프로필</h1>
+                        <h1 className="block mt-1 text-lg leading-tight font-medium text-black">{userData.name}님의 프로필</h1>
                         <div className="mt-4">
                             <div className="mb-4">
                                 <p className="text-gray-500">이메일</p>
                                 <p className="font-semibold">{userData.email}</p>
+                            </div>
+                            <div className="mb-4">
+                                <p className="text-gray-500">학과</p>
+                                <p className="font-semibold">{userData.departure}</p>
                             </div>
                         </div>
                         <button

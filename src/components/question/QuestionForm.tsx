@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { addQuestion } from '../../services/questionService.ts';
-import { useAuth } from '../../services/authProvider.tsx';
-import { problemType } from '../../types'
+import { problemType, UserData } from '../../types';
 import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import SyntaxHighlighter from 'react-syntax-highlighter/dist/esm/default-highlight';
+import { auth, db } from '../../services/firebase.ts';
+import { doc, getDoc } from 'firebase/firestore';
+
 
 const QuestionForm: React.FC = () => {
   const [input, setInput] = useState<problemType>({
@@ -14,40 +16,52 @@ const QuestionForm: React.FC = () => {
     codeLanguage: '',
     codespace: null
   });
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
-  const { user } = useAuth();
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setInput(prev => ({ ...prev, [name]: value }));
   };
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userRef = doc(db, 'users', user.uid);
+        const userSnap = await getDoc(userRef);
+        if (userSnap.exists()) {
+          const data = userSnap.data() as UserData;
+          setUserData(data);
+        }
+      } else
+        navigate('/login');
+    };
+    fetchUserData();
+  }, [navigate]);
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      setError('로그인이 필요합니다.');
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      if (!user.uid) {
-        setError('사용자 정보를 찾을 수 없습니다.');
-        return;
+    if (userData){
+      setIsSubmitting(true);
+      try {
+        await addQuestion({ ...input, writer: userData.name, author: userData.uid });
+        navigate(`/board`);
+      } catch (err) {
+        setError('질문 등록에 실패했습니다.');
+        console.error('Error adding question:', err);
+      } finally {
+        setIsSubmitting(false);
       }
-      await addQuestion({ ...input, writer: user.displayName ? user.displayName : "", author: user.uid });
-      navigate(`/board`);
-    } catch (err) {
-      setError('질문 등록에 실패했습니다.');
-      console.error('Error adding question:', err);
-    } finally {
-      setIsSubmitting(false);
+    }
+    else {
+      navigate('/');
     }
   };
 
   const languages = [
-    "C++17", "Python 3", "PyPy3", "C99", "Java 11", "Ruby", "Kotlin (JVM)", 
+    "C++17", "Python 3", "PyPy3", "C99", "Java 11", "Ruby", "Kotlin (JVM)",
     "Swift", "Text", "C#", "node.js", "Go", "D", "Rust 2018", "C++17 (Clang)"
   ];
 
@@ -132,15 +146,15 @@ const QuestionForm: React.FC = () => {
               <SyntaxHighlighter
                 language={input.codeLanguage.toLowerCase().startsWith("c") ? "cpp" : input.codeLanguage.toLowerCase().startsWith("node") ? "javascript" : "python"}
                 style={docco}
-                customStyle={{margin: 0, padding: '1em'}}
+                customStyle={{ margin: 0, padding: '1em' }}
               >
                 {input.codespace as string}
               </SyntaxHighlighter>
             </div>
           </div>
         )}
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className="w-full bg-indigo-600 text-white px-4 py-3 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 transition duration-200 ease-in-out"
           disabled={isSubmitting}
         >

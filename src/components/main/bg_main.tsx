@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaArrowDown } from "react-icons/fa";
 import CountUp from 'react-countup';
 import { easeInOut, motion } from "framer-motion";
@@ -17,9 +16,9 @@ export default function BgMain({ count, p_one, r_one }: BgMainProps) {
                 className="relative w-full min-h-screen bg-no-repeat bg-cover bg-center flex items-center justify-center overflow-hidden"
             >
                 <div className="relative max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 flex flex-col justify-between h-full">
-                    <div className="font-pretendard absolute -top-20 left-0 text-white text-8xl sm:text-9xl lg:text-[12rem] xl:text-[16.5rem] font-extrabold opacity-10 leading-none">HIPC</div>
+                    <div className="font-pretendard absolute top-0 left-0 text-white text-9xl lg:text-[12rem] xl:text-[16.5rem] font-extrabold opacity-10 leading-none">HIPC</div>
                     
-                    <div className="mt-24 sm:mt-32 lg:mt-40 flex flex-col text-white space-y-8">
+                    <div className="mt-32 text-center sm:mt-40 lg:mt-52 flex flex-col text-white space-y-8">
                         <div className="flex flex-col items-center w-fit mx-auto">
                             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-2 opacity-90 break-keep">
                                 한양인들을 위한 알고리즘 스터디
@@ -39,7 +38,7 @@ export default function BgMain({ count, p_one, r_one }: BgMainProps) {
                         </div>
                     </div>
                     
-                    <div className="mt-12 sm:mt-16 lg:mt-20 font-pretendard text-nowrap text-white text-lg sm:text-xl lg:text-2xl xl:text-3xl font-bold opacity-80 space-y-3 sm:space-y-4">
+                    <div className="mt-16 md:mt-28 font-pretendard text-nowrap text-white text-xl xl:text-3xl font-bold opacity-80 space-y-3 sm:space-y-4">
                         <p>오늘까지 HIPC는 총 <CountUp end={3844 + count} duration={2} className="text-yellow-300" /> 문제,</p>
                         <p>이번 분기에 총 <CountUp end={count ? count : 60} start={0} duration={2} className="text-yellow-300" /> 문제를 풀었습니다.</p>
                         <p>이번 분기 문제 수 1위: <span className="text-green-300">{p_one}</span></p>

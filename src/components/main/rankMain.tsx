@@ -121,7 +121,7 @@ export default function RankMain({
 
     return (
         <div id="1" className="font-pretendard w-full py-8 sm:py-12">
-            <div className="max-w-7xl mx-auto px-4 md:px-8">
+            <div className="max-w-6xl mx-auto px-4 md:px-8">
                 <div className='mt-2 text-2xl sm:text-4xl font-semibold mb-1'>Ranking</div>
                 <div className='text-sm md:text-base text-gray-500 mb-2'>- 모든 랭킹은 매일 06:00에 갱신됩니다.</div>
                 <div className="flex flex-col lg:flex-row gap-4">

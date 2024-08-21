@@ -12,6 +12,15 @@ export interface Question {
   solved: boolean;
   createdAt: Date;
 }
+
+export interface UserData {
+  email: string;
+  name: string;
+  departure: string;
+  uid: string;
+  photoURL: string;
+}
+
 export interface QuestionListType{
   id: string;
   p_num: number;
