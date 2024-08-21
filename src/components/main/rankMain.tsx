@@ -1,19 +1,8 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 import { FaMedal } from "react-icons/fa";
-import { BaseUserState, Problem, RankType, RatingDiffRankUser, RatingRankUser, SolvedDiffRankUser } from '../../types';
+import { BaseUserState, RankMainProps, RatingDiffRankUser, RatingRankUser, SolvedDiffRankUser } from '../../types';
 import { motion } from 'framer-motion';
-
-interface RankMainProps {
-    loading: boolean;
-    error: string | null;
-    ratingRank: RatingRankUser[];
-    solvedDiffRank: SolvedDiffRankUser[];
-    ratingDiffRank: RatingDiffRankUser[];
-    currentRankType: RankType;
-    setCurrentRankType: React.Dispatch<React.SetStateAction<RankType>>;
-    solvedProblems: Problem[];
-}
 
 type RankUser = RatingRankUser | SolvedDiffRankUser | RatingDiffRankUser;
 
@@ -132,7 +121,7 @@ export default function RankMain({
 
     return (
         <div id="1" className="font-pretendard w-full py-8 sm:py-12">
-            <div className="max-w-7xl mx-auto px-8">
+            <div className="max-w-7xl mx-auto px-4 md:px-8">
                 <div className='mt-2 text-2xl sm:text-4xl font-semibold mb-1'>Ranking</div>
                 <div className='text-sm md:text-base text-gray-500 mb-2'>- 모든 랭킹은 매일 06:00에 갱신됩니다.</div>
                 <div className="flex flex-col lg:flex-row gap-4">
@@ -179,15 +168,15 @@ export default function RankMain({
                             <h2 className="text-lg sm:text-xl font-bold">최근 푼 문제</h2>
                         </div>
                         <div className="bg-gray-100 p-4 rounded-lg max-h-[540px] overflow-y-auto">
-                            <div className="flex flex-wrap gap-2">
+                            <div className="flex flex-wrap gap-y-2">
                                 {solvedProblems.map((problem, index) => (
                                     <div
-                                        className="flex w-full items-center text-sm sm:text-base"
+                                        className="flex w-1/2 lg:w-full items-center text-sm sm:text-base"
                                         key={index}>
                                         <Link
                                             target="_blank"
                                             to={`https://www.acmicpc.net/problem/${problem.p_num}`}
-                                            className="bg-gray-200 font-semibold px-2 ml-2 rounded hover:bg-blue-200 transition-colors flex gap-2"
+                                            className="bg-gray-200 font-semibold px-1 ml-1 rounded hover:bg-blue-200 transition-colors flex gap-2"
                                             title={`Tier: ${problem.p_tier}, Solved by: ${problem.boj_id}`}
                                         >
                                             {problem.p_num}

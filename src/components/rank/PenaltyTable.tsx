@@ -49,14 +49,14 @@ export default function PenaltyTable() {
     const totalUnpaid = totalPenalty - totalPaid;
 
     return (
-        <div className="max-w-7xl font-pretendard mx-auto px-8 pb-12">
+        <div className="max-w-7xl font-pretendard mx-auto px-4 md:px-8 pb-12">
             <div className="text-sm md:text-base text-gray-500 mb-2">-벌금은 갱신까지 시간이 소요됩니다.. 수동이라..ㅎ</div>
             {loading ? (
                 <div className="flex justify-center items-center h-64">
                     <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
                 </div>
             ) : error ? (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <div className="bg-red-100 border border-red-400 text-red-700 px-2 py-3 rounded relative" role="alert">
                     <strong className="font-bold">오류!</strong>
                     <span className="block sm:inline"> {error}</span>
                 </div>
@@ -96,12 +96,12 @@ export default function PenaltyTable() {
                             <table className="min-w-full">
                                 <thead className="bg-gray-200">
                                     <tr>
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">이름</th>
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">BOJ ID</th>
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">벌금</th>
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">납부액</th>
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">미납액</th>
-                                        <th className="px-4 sm:px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">상태</th>
+                                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">이름</th>
+                                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">BOJ ID</th>
+                                        <th className="px-2 py-3 text-left text-nowrap text-xs font-medium text-gray-600 uppercase tracking-wider">벌금</th>
+                                        <th className="px-2 py-3 text-left text-xs text-nowrap font-medium text-gray-600 uppercase tracking-wider">납부액</th>
+                                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">미납액</th>
+                                        <th className="px-2 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">상태</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200">
@@ -109,12 +109,12 @@ export default function PenaltyTable() {
                                         const unpaid = penalty.penalty - penalty.paid;
                                         return (
                                             <tr key={penalty.boj_id} className="hover:bg-gray-50">
-                                                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm">{penalty.name || '-'}</td>
-                                                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm">{penalty.boj_id || '-'}</td>
-                                                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm">{penalty.penalty.toLocaleString()}원</td>
-                                                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm">{penalty.paid.toLocaleString()}원</td>
-                                                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm">{unpaid.toLocaleString()}원</td>
-                                                <td className="px-4 sm:px-6 py-4 whitespace-nowrap text-sm">
+                                                <td className="px-2 py-4 whitespace-nowrap text-sm">{penalty.name || '-'}</td>
+                                                <td className="px-2  py-4 whitespace-nowrap text-sm">{penalty.boj_id || '-'}</td>
+                                                <td className="px-2 py-4 whitespace-nowrap text-sm">{penalty.penalty.toLocaleString()}원</td>
+                                                <td className="px-2 py-4 whitespace-nowrap text-sm">{penalty.paid.toLocaleString()}원</td>
+                                                <td className="px-2 py-4 whitespace-nowrap text-sm">{unpaid.toLocaleString()}원</td>
+                                                <td className="px-2 py-4 whitespace-nowrap text-sm">
                                                     {unpaid === 0 ? (
                                                         <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
                                                             완납

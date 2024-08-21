@@ -76,3 +76,15 @@ export interface Problem {
   p_tier: number;
   p_time: Timestamp;
 }
+
+
+export interface RankMainProps {
+  loading: boolean;
+  error: string | null;
+  ratingRank: RatingRankUser[];
+  solvedDiffRank: SolvedDiffRankUser[];
+  ratingDiffRank: RatingDiffRankUser[];
+  currentRankType: RankType;
+  setCurrentRankType: React.Dispatch<React.SetStateAction<RankType>>;
+  solvedProblems: Problem[];
+}

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
-import { auth, db } from "../services/firebase"
+import { auth, db } from "../services/firebase";
 
 export default function Login() {
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function Login() {
     };
 
     return (
-        <div className='Dirty_Beauty w-full h-screen flex items-center justify-center'>
+        <div className='Dirty_Beauty w-full h-screen flex items-center justify-center px-8'>
             <div className='bg-white flex flex-row items-center max-w-4xl w-full rounded-2xl h-[600px]'>
                 <div style={{ backgroundImage: "url(./assets/images/hipc_bgmain.png)" }} className='hidden md:flex items-center justify-center bg-blue-950 bg-cover bg-no-repeat maxmd:rounded-t-2xl md:rounded-l-2xl w-full md:w-1/2 md:h-full h-1/2'>
                     <div className='font-pretendard font-bold text-white text-4xl opacity-70 '>

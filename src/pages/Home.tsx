@@ -67,7 +67,7 @@ export default function Home() {
                 solvedProblems={solvedProblems}
             />
             <div className="max-w-7xl mx-auto">
-                <div className='mt-2 px-8 text-2xl sm:text-4xl font-semibold mb-1'>Penalty</div>
+                <div className='mt-2 px-4 md:px-8 text-2xl sm:text-4xl font-semibold mb-1'>Penalty</div>
                 <PenaltyTable />
             </div>
         </div>

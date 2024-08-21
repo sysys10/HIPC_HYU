@@ -16,7 +16,7 @@ const QuestionDetail: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const { id } = useParams<{ id: string }>();
   const { user, loading } = useAuth();
-  const [question, setQuestion] = useState<Question | null>(null)
+  const [question, setQuestion] = useState<Question | null>(null);
 
   useEffect(() => {
     const fetchQuestionAndComments = async () => {
@@ -42,7 +42,6 @@ const QuestionDetail: React.FC = () => {
       setError('댓글을 작성하려면 로그인이 필요합니다.');
       return;
     }
-
     try {
       const newCommentData: Omit<Comment, "id" | "createdAt"> = {
         questionId: id,
